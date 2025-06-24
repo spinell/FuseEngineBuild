@@ -87,7 +87,7 @@ jobs:
         os: [ ubuntu-24.04]
         buildConfig: [Debug, Release, RelWithDebInfo]
         compiler:
-          - { cc: gcc, cxx: g++, version: 12}
+          #- { cc: gcc, cxx: g++, version: 12} GCC 12 does not support std::format
           - { cc: gcc, cxx: g++, version: 13}
           - { cc: gcc, cxx: g++, version: 14}
           - { cc: clang, cxx: clang++, version: 16 }

@@ -2,6 +2,7 @@
 
 name: Build-Branch
 
+
 # Controls when the workflow will run
 on:
   # Allows you to run this workflow manually from the Actions tab
@@ -12,6 +13,9 @@ jobs:
   build-gcc13:
     # The type of runner that the job will run on
     runs-on: ubuntu-24.04
+    env:
+        BUILD_DIR: "build/gcc-13-debug"
+        INSTALL_DIR: "install/gcc-13-debug"
 
     steps:
       - name: Checkout FuseEngine
@@ -27,24 +31,25 @@ jobs:
         run: cmake --preset gcc-13-debug -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
 
       - name: Build Debug (gcc 13)
-        run: cmake --build build/gcc-13-debug
+        run: cmake --build ${{env.BUILD_DIR}}
 
       - name: Run test Debug (gcc 13)
-        run: ctest --test-dir build/gcc-13-debug --verbose
+        run: ctest --test-dir ${{env.BUILD_DIR}} --verbose
 
       - name: Install Debug (gcc 13)
-        run: cmake --install build/gcc-13-debug  --prefix ./install/gcc-13-debug
+        run: cmake --install ${{env.BUILD_DIR}}  --prefix ${{env.INSTALL_DIR}}
 
       - uses: actions/upload-artifact@v4
         with:
           name: install-ubuntu-gcc-13-debug
-          path: ./install/gcc-13-debug
-
-      - run: echo "This job's status is ${{ job.status }}."
+          path: ${{env.INSTALL_DIR}}
 
   build-gcc14:
     # The type of runner that the job will run on
     runs-on: ubuntu-24.04
+    env:
+        BUILD_DIR: "build/gcc-14-debug"
+        INSTALL_DIR: "install/gcc-14-debug"
 
     steps:
       - name: Checkout FuseEngine
@@ -60,30 +65,18 @@ jobs:
         run: cmake --preset gcc-14-debug -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
 
       - name: Build Debug (gcc 14)
-        run: cmake --build build/gcc-14-debug
+        run: cmake --build ${{env.BUILD_DIR}}
 
       - name: Run test Debug (gcc 14)
-        run: ctest --test-dir build/gcc-14-debug --verbose
+        run: ctest --test-dir ${{env.BUILD_DIR}} --verbose
 
       - name: Install Debug (gcc 14)
-        run: cmake --install build/gcc-14-debug  --prefix ./install/gcc-14-debug
+        run: cmake --install ${{env.BUILD_DIR}}  --prefix ${{env.INSTALL_DIR}}
 
       - uses: actions/upload-artifact@v4
         with:
           name: install-ubuntu-gcc-14-debug
-          path: ./install/gcc-14-debug
-
-      - name: Install Debug (gcc 14)
-        run: |
-          cpack --config build/gcc-14-debug/CPackConfig.cmake -G ZIP -B build/gcc-14-debug/package
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: FuseEngine-0.0.1-Linux-gcc-14.zip
-          path: build/gcc-14-debug/package/FuseEngine-0.0.1-Linux.zip
-
-      - run: echo "This job's status is ${{ job.status }}."
-
+          path: ${{env.INSTALL_DIR}}
 
   windows:
     name: Windows-2022-${{ matrix.buildConfig }}
@@ -132,14 +125,3 @@ jobs:
         with:
           name: install-windows-${{ matrix.buildConfig }}
           path: ${{env.INSTALL_DIR}}
-
-      - name: Running cpack
-        run: |
-          cpack --config ${{env.BUILD_DIR}}/CPackConfig.cmake -G ZIP -B ${{env.BUILD_DIR}}/package -C ${{ matrix.buildConfig }}
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: FuseEngine-0.0.1-win64-${{ matrix.buildConfig }}.zip
-          path:  ${{env.BUILD_DIR}}/package/FuseEngine-0.0.1-win64.zip
-
-      - run: echo "This job's status is ${{ job.status }}."

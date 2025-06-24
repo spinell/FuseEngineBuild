@@ -78,6 +78,58 @@ jobs:
           name: install-ubuntu-gcc-14-debug
           path: ${{env.INSTALL_DIR}}
 
+  linux:
+    name: ${{ matrix.os }}-${{ matrix.compiler.cc }}-${{ matrix.compiler.version }}-${{ matrix.buildConfig }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false # if one job in the matrix fail, don't cancel other jobs inthe matrix
+      matrix:
+        os: [ ubuntu-24.04]
+        buildConfig: [Debug, Release, RelWithDebInfo]
+        compiler:
+          - { cc: gcc, cxx: g++, version: 12}
+          - { cc: gcc, cxx: g++, version: 13}
+          - { cc: gcc, cxx: g++, version: 14}
+          - { cc: clang, cxx: clang++, version: 16 }
+          - { cc: clang, cxx: clang++, version: 17 }
+          - { cc: clang, cxx: clang++, version: 18 }
+    env:
+        BUILD_DIR: "build/${{matrix.compiler.cc}}-${{matrix.compiler.version}}${{matrix.compiler.buildConfig}}"
+        INSTALL_DIR: "install/${{matrix.compiler.cc}}-${{matrix.compiler.version}}${{matrix.compiler.buildConfig}}"
+    steps:
+      - name: Checkout FuseEngine
+        uses: actions/checkout@v4
+        with:
+          repository: spinell/FuseEngine
+          ref: dev
+          token: ${{ secrets.PAT }}
+          submodules: recursive
+      # Runs a set of commands using the runners shell
+      - name: CMake Configure
+        env:
+          CC: "${{ matrix.compiler.cc }}-${{ matrix.compiler.version }}"
+          CXX: "${{ matrix.compiler.cxx }}-${{ matrix.compiler.version }}"
+        run: |
+          cmake --preset gcc-14-debug \
+            -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake \
+            -DCMAKE_BUILD_TYPE=${{matrix.buildConfig}} \
+            -DCMAKE_C_COMPILER=${{env.CC}} \
+            -DCMAKE_CXX_COMPILER=${{env.CXX}}
+
+      - name: Build Debug
+        run: cmake --build ${{env.BUILD_DIR}}
+
+      - name: Run test
+        run: ctest --test-dir ${{env.BUILD_DIR}} --verbose
+
+      - name: Install Debug
+        run: cmake --install ${{env.BUILD_DIR}}  --prefix ${{env.INSTALL_DIR}}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: install-ubuntu-${{ matrix.compiler.cc }}-${{ matrix.compiler.version }}-${{matrix.buildConfig}}
+          path: ${{env.INSTALL_DIR}}
+
   windows:
     name: Windows-2022-${{ matrix.buildConfig }}
     runs-on: Windows-2022

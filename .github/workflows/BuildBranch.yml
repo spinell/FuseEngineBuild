@@ -54,7 +54,7 @@ jobs:
         run: cmake --build ${{env.BUILD_DIR}}
 
       - name: Run test
-        run: ctest --test-dir ${{env.BUILD_DIR}} --verbose
+        run: ctest --test-dir ${{env.BUILD_DIR}} --rerun-failed --output-on-failure
 
       - name: Install Debug
         run: cmake --install ${{env.BUILD_DIR}}  --prefix ${{env.INSTALL_DIR}}
@@ -102,7 +102,7 @@ jobs:
         run: cmake --build ${{env.BUILD_DIR}} --config ${{ matrix.buildConfig }}
 
       - name: Running tests ...
-        run: ctest --test-dir ${{env.BUILD_DIR}} --build-config ${{ matrix.buildConfig }}
+        run: ctest --test-dir ${{env.BUILD_DIR}} --build-config ${{ matrix.buildConfig }} --rerun-failed --output-on-failure
 
       - name: Running cmake install ...
         run: cmake --install ${{env.BUILD_DIR}}  --prefix ${{env.INSTALL_DIR}} --config ${{ matrix.buildConfig }}
@@ -195,7 +195,7 @@ jobs:
         run: cmake --build ${{env.BUILD_DIR}} --config ${{ matrix.buildConfig }}
 
       - name: Running tests ...
-        run: ctest --test-dir ${{env.BUILD_DIR}} --build-config ${{ matrix.buildConfig }}
+        run: ctest --test-dir ${{env.BUILD_DIR}} --build-config ${{ matrix.buildConfig }} --rerun-failed --output-on-failure
 
       - name: Running cmake install ...
         run: cmake --install ${{env.BUILD_DIR}}  --prefix ${{env.INSTALL_DIR}} --config ${{ matrix.buildConfig }}

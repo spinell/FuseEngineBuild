@@ -26,13 +26,14 @@ jobs:
         with:
           repository: spinell/3DGame
           path: 3DGame
-          ref: main
+          token: ${{ secrets.PUBLIC_PAT }}
           submodules: recursive
 
       - name: Checkout Private
         uses: actions/checkout@v4
         with:
           repository: spinell/FuseEngine
+          token: ${{ secrets.PUBLIC_PAT }}
           submodules: recursive
 
       # Runs a single command using the runners shell

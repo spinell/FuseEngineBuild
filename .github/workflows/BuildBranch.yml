@@ -39,7 +39,5 @@ jobs:
           cmake --version
 
       # Runs a set of commands using the runners shell
-      - name: CMake Configure
-        run: cmake --preset gcc-14-debug
-        env:
-          VCPKG_ROOT: ${{env.VCPKG_INSTALLATION_ROOT}}/scripts/buildsystems/vcpkg.cmake
+      - name: CMake Configure Debug (gcc 14)
+        run: cmake --preset gcc-14-debug -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake

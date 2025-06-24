@@ -35,6 +35,13 @@ jobs:
       - name: Install Debug (gcc 13)
         run: cmake --install build/gcc-13-debug  --prefix ./install/gcc-13-debug
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: install-ubuntu-gcc-13-debug
+          path: ./install/gcc-13-debug
+
+      - run: echo "This job's status is ${{ job.status }}."
+
   build-gcc14:
     # The type of runner that the job will run on
     runs-on: ubuntu-24.04
@@ -60,3 +67,10 @@ jobs:
 
       - name: Install Debug (gcc 14)
         run: cmake --install build/gcc-14-debug  --prefix ./install/gcc-14-debug
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: install-ubuntu-gcc-14-debug
+          path: ./install/gcc-14-debug
+
+      - run: echo "This job's status is ${{ job.status }}."

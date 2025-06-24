@@ -16,6 +16,7 @@ jobs:
     strategy:
       fail-fast: false # if one job in the matrix fail, don't cancel other jobs inthe matrix
       matrix:
+         # https://github.com/actions/virtual-environments/tree/main/images/linux
         os: [ ubuntu-24.04]
         buildConfig: [Debug, Release, RelWithDebInfo]
         compiler:
@@ -110,3 +111,64 @@ jobs:
         with:
           name: install-windows-${{ matrix.buildConfig }}
           path: ${{env.INSTALL_DIR}}
+
+  osx:
+    name: ${{ matrix.os }}-${{ matrix.compiler.cc }}-${{ matrix.compiler.version }}-${{ matrix.buildConfig }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false # if one job in the matrix fail, don't cancel other jobs inthe matrix
+      matrix:
+        os: [ macos-13, macos-14, macos-15 ]
+        buildConfig: [Debug, RelWithDebInfo, Release]
+        compiler:
+          - { cc: clang, cxx: clang++, version: 14} # 14.0.0
+          - { cc: clang, cxx: clang++, version: 15} # 15.0.7
+          - { cc: clang, cxx: clang++, version: 18} # 18.1.8
+        exclude:
+            - os : macos-13
+              compiler: { cc: clang, cxx: clang++, version: 18 }
+            - os : macos-14
+              compiler: { cc: clang, cxx: clang++, version: 14 }
+            - os : macos-14
+              compiler: { cc: clang, cxx: clang++, version: 18 }
+            - os : macos-15
+              compiler: { cc: clang, cxx: clang++, version: 14 }
+    env:
+      BUILD_DIR: "build/${{matrix.compiler.cc}}-${{matrix.compiler.version}}${{matrix.compiler.buildConfig}}"
+      INSTALL_DIR: "install/${{matrix.compiler.cc}}-${{matrix.compiler.version}}${{matrix.compiler.buildConfig}}"
+
+    steps:
+      - run: clang          --version
+      - run: /usr/bin/clang --version
+      - run: gcc            --version
+      - run: /usr/bin/gcc   --version
+      - run: ls -la /usr/bin/gcc
+      - run: ls -la /usr/bin/clang
+      - run: ls -la /usr/local/opt/ || echo ""
+      - run: ls -la /usr/local/opt/ || echo ""
+      - run: echo $PATH
+      - run: which vcpkg
+      - run: echo "$(brew --prefix llvm)/bin/clang"
+      - run: echo "$(brew --prefix llvm@15)/bin/clang"
+      - run: echo "$(brew --prefix llvm@18)/bin/"
+
+      # Clone the repo
+      - name: Checkout FuseEngine
+        uses: actions/checkout@v4
+        with:
+          repository: spinell/FuseEngine
+          ref: dev
+          token: ${{ secrets.PAT }}
+          submodules: recursive
+
+      - name: CMake Configure
+        env:
+          CC: "${{ matrix.compiler.cc }}-${{ matrix.compiler.version }}"
+          CXX: "${{ matrix.compiler.cxx }}-${{ matrix.compiler.version }}"
+        run: |
+          cmake --preset gcc-14-debug \
+          -B ${{env.BUILD_DIR}} \
+          -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake \
+          -DCMAKE_BUILD_TYPE=${{matrix.buildConfig}} \
+          -DCMAKE_C_COMPILER=${{env.CC}} \
+          -DCMAKE_CXX_COMPILER=${{env.CXX}}

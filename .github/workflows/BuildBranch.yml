@@ -76,22 +76,10 @@ jobs:
       - name: Install Debug (gcc 14)
         run: |
           cpack --config build/gcc-14-debug/CPackConfig.cmake -G ZIP -B build/gcc-14-debug/package
-          cpack --config build/gcc-14-debug/CPackConfig.cmake -G 7Z  -B build/gcc-14-debug/package
-          cpack --config build/gcc-14-debug/CPackConfig.cmake -G TAR -B build/gcc-14-debug/package
 
       - uses: actions/upload-artifact@v4
         with:
           name: FuseEngine-0.0.1-Linux-gcc-14.zip
           path: build/gcc-14-debug/package/FuseEngine-0.0.1-Linux.zip
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: FuseEngine-0.0.1-Linux-gcc-14.7z
-          path: build/gcc-14-debug/package/FuseEngine-0.0.1-Linux.7z
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: FuseEngine-0.0.1-Linux-gcc-14.tar
-          path: build/gcc-14-debug/package/FuseEngine-0.0.1-Linux.tar
 
       - run: echo "This job's status is ${{ job.status }}."

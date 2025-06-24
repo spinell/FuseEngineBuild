@@ -139,7 +139,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: FuseEngine-0.0.1-win64.zip
+          name: FuseEngine-0.0.1-win64-${{ matrix.buildConfig }}.zip
           path:  ${{env.BUILD_DIR}}/package/FuseEngine-0.0.1-win64.zip
 
       - run: echo "This job's status is ${{ job.status }}."

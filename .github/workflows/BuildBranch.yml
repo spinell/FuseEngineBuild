@@ -42,4 +42,4 @@ jobs:
       - name: CMake Configure
         run: cmake --preset gcc-14-debug
         env:
-          VCPKG_ROOT: $VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
+          VCPKG_ROOT: ${{env.VCPKG_INSTALLATION_ROOT}}/scripts/buildsystems/vcpkg.cmake

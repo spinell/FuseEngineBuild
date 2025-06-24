@@ -111,6 +111,7 @@ jobs:
           CXX: "${{ matrix.compiler.cxx }}-${{ matrix.compiler.version }}"
         run: |
           cmake --preset gcc-14-debug \
+             -B ${{env.BUILD_DIR}} \
             -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake \
             -DCMAKE_BUILD_TYPE=${{matrix.buildConfig}} \
             -DCMAKE_C_COMPILER=${{env.CC}} \

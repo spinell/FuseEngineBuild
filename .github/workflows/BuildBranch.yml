@@ -117,7 +117,7 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Running cmake configure ...
-        run: cmake --preset ninja-multi-config -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
+        run: cmake --preset ninja-multi-config -DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
 
       - name: Running cmake build ...
         run: cmake --build ${{env.BUILD_DIR}} --config ${{ matrix.buildConfig }}

@@ -83,3 +83,63 @@ jobs:
           path: build/gcc-14-debug/package/FuseEngine-0.0.1-Linux.zip
 
       - run: echo "This job's status is ${{ job.status }}."
+
+
+  windows:
+    name: Windows-2022-${{ matrix.buildConfig }}
+    runs-on: Windows-2022
+    strategy:
+      matrix:
+        buildConfig: [Debug, RelWithDebInfo, Release]
+    env:
+        BUILD_DIR: "build/ninja-multi-config"
+        INSTALL_DIR: "install/ninja-multi-config"
+
+    steps:
+      # Clone the repo
+      - name: Checkout FuseEngine
+        uses: actions/checkout@v4
+        with:
+          repository: spinell/FuseEngine
+          ref: dev
+          token: ${{ secrets.PAT }}
+          submodules: recursive
+
+      # Install ninja
+      - uses: seanmiddleditch/gha-setup-ninja@master
+      - run : ninja --version
+
+      # setup MSVC shell
+      - name: Set Visual Studio Architecture
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
+
+      # Runs a set of commands using the runners shell
+      - name: Running cmake configure ...
+        run: cmake --preset ninja-multi-config -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
+
+      - name: Running cmake build ...
+        run: cmake --build ${{env.BUILD_DIR}} --config ${{ matrix.buildConfig }}
+
+      - name: Running tests ...
+        run: ctest --test-dir ${{env.BUILD_DIR}} --build-config ${{ matrix.buildConfig }}
+
+      - name: Running cmake install ...
+        run: cmake --install ${{env.BUILD_DIR}}  --prefix ${{env.INSTALL_DIR}} --config ${{ matrix.buildConfig }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-${{ matrix.buildConfig }}
+          path: ${{env.INSTALL_DIR}}
+
+      - name: Install Debug (gcc 14)
+        run: |
+          cpack --config ${{matrix.buildConfig}}/CPackConfig.cmake -G ZIP -B ${{env.BUILD_DIR}}/package
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FuseEngine-0.0.1-Windows.zip
+          path:  ${{env.BUILD_DIR}}/package/FuseEngine-0.0.1-Windows.zip
+
+      - run: echo "This job's status is ${{ job.status }}."

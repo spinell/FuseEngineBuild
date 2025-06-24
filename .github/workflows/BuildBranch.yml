@@ -130,16 +130,16 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: windows-${{ matrix.buildConfig }}
+          name: install-windows-${{ matrix.buildConfig }}
           path: ${{env.INSTALL_DIR}}
 
-      - name: Install Debug (gcc 14)
+      - name: Running cpack
         run: |
           cpack --config ${{env.BUILD_DIR}}/CPackConfig.cmake -G ZIP -B ${{env.BUILD_DIR}}/package -C ${{ matrix.buildConfig }}
 
       - uses: actions/upload-artifact@v4
         with:
-          name: FuseEngine-0.0.1-Windows.zip
-          path:  ${{env.BUILD_DIR}}/package/FuseEngine-0.0.1-Windows.zip
+          name: FuseEngine-0.0.1-win64.zip
+          path:  ${{env.BUILD_DIR}}/package/FuseEngine-0.0.1-win64.zip
 
       - run: echo "This job's status is ${{ job.status }}."

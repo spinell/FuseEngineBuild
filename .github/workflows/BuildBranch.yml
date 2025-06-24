@@ -25,6 +25,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: spinell/3DGame
+          path: 3DGame
+          ref: main
           submodules: recursive
 
       - name: Checkout Private

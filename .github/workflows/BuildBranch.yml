@@ -166,7 +166,7 @@ jobs:
           CC: "${{ matrix.compiler.cc }}-${{ matrix.compiler.version }}"
           CXX: "${{ matrix.compiler.cxx }}-${{ matrix.compiler.version }}"
         run: |
-          cmake --preset gcc-14-debug \
+          cmake --preset osx \
           -B ${{env.BUILD_DIR}} \
           -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake \
           -DCMAKE_BUILD_TYPE=${{matrix.buildConfig}} \

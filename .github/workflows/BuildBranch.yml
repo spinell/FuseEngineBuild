@@ -135,7 +135,7 @@ jobs:
 
       - name: Install Debug (gcc 14)
         run: |
-          cpack --config ${{matrix.buildConfig}}/CPackConfig.cmake -G ZIP -B ${{env.BUILD_DIR}}/package
+          cpack --config ${{env.BUILD_DIR}}/CPackConfig.cmake -G ZIP -B ${{env.BUILD_DIR}}/package -C ${{ matrix.buildConfig }}
 
       - uses: actions/upload-artifact@v4
         with:

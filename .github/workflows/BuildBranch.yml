@@ -46,7 +46,7 @@ jobs:
         run: cmake --build build/gcc-14-debug
 
       - name: Run test Debug (gcc 14)
-        run: ctest ---test-dir build/gcc-14-debug
+        run: ctest --test-dir build/gcc-14-debug
 
       - name: Install Debug (gcc 14)
         run: cmake --install build/gcc-14-debug  --prefix ./install/gcc-14-debug

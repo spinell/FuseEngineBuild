@@ -124,6 +124,7 @@ jobs:
           - { cc: clang, cxx: clang++, version: 14} # 14.0.0
           - { cc: clang, cxx: clang++, version: 15} # 15.0.7
           - { cc: clang, cxx: clang++, version: 18} # 18.1.8
+          - { cc: gcc,   cxx: g++,     version: 14} # 18.1.8
         exclude:
             - os : macos-13
               compiler: { cc: clang, cxx: clang++, version: 14 } # AppleClang 15.0.0.15000100 /usr/bin/clang++
@@ -188,6 +189,9 @@ jobs:
               CC=/usr/bin/clang
               CXX=/usr/bin/clang++
             fi
+            else
+              CC=${{matrix.compiler.cc }}-${{matrix.compiler.version }}
+              CXX=${{matrix.compiler.cxx }}-${{matrix.compiler.version }}
           fi
 
           cmake --preset osx \

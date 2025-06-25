@@ -1,12 +1,19 @@
 # This is a basic workflow to help you get started with Actions
 
 name: Build-Branch
+description: 'Performs a build branch'
 
 
 # Controls when the workflow will run
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      warningsAsErrors:
+        description: 'Build with warnings as errors'
+        required: true
+        type: 'boolean'
+        default: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -47,6 +54,7 @@ jobs:
              -B ${{env.BUILD_DIR}} \
             -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake \
             -DCMAKE_BUILD_TYPE=${{matrix.buildConfig}} \
+            -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }} \
             -DCMAKE_C_COMPILER=${{env.CC}} \
             -DCMAKE_CXX_COMPILER=${{env.CXX}}
 
@@ -96,7 +104,10 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Running cmake configure ...
-        run: cmake --preset ninja-multi-config -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_COMPILE_WARNING_AS_ERROR=OFF
+        run: |
+          cmake --preset ninja-multi-config ^
+            -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake ^
+            -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
 
       - name: Running cmake build ...
         run: cmake --build ${{env.BUILD_DIR}} --config ${{ matrix.buildConfig }}
@@ -198,6 +209,7 @@ jobs:
           -B ${{env.BUILD_DIR}} \
           -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake \
           -DCMAKE_BUILD_TYPE=${{matrix.buildConfig}} \
+          -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }} \
           -DCMAKE_C_COMPILER=$CC \
           -DCMAKE_CXX_COMPILER=$CXX
 

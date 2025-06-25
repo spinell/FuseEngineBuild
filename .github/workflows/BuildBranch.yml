@@ -105,8 +105,8 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Running cmake configure ...
         run: |
-          cmake --preset ninja-multi-config ^
-            -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake ^
+          cmake --preset ninja-multi-config `
+            -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake `
             -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
 
       - name: Running cmake build ...

@@ -76,6 +76,7 @@ jobs:
     name: Windows-2022-${{ matrix.buildConfig }}
     runs-on: Windows-2022
     strategy:
+      fail-fast: false # if one job in the matrix fail, don't cancel other jobs inthe matr
       matrix:
         buildConfig: [Debug, RelWithDebInfo, Release]
     env:

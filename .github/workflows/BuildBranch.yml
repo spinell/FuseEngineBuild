@@ -202,5 +202,5 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: install-windows-${{ matrix.buildConfig }}
+          name: install-${{ matrix.os }}-${{ matrix.compiler.cc }}-${{ matrix.compiler.version }}-${{ matrix.buildConfig }}
           path: ${{env.INSTALL_DIR}}

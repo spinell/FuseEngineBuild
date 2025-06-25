@@ -126,9 +126,15 @@ jobs:
           - { cc: clang, cxx: clang++, version: 18} # 18.1.8
         exclude:
             - os : macos-13
+              compiler: { cc: clang, cxx: clang++, version: 14 } # AppleClang 15.0.0.15000100 /usr/bin/clang++
+            - os : macos-13
+              compiler: { cc: clang, cxx: clang++, version: 15 } # Clang 15.0.7 /usr/local/opt/llvm@15/bin/clang
+            - os : macos-13
               compiler: { cc: clang, cxx: clang++, version: 18 }
             - os : macos-14
               compiler: { cc: clang, cxx: clang++, version: 14 }
+            - os : macos-14
+              compiler: { cc: clang, cxx: clang++, version: 15 } # Clang 15.0.7 /opt/homebrew/opt/llvm@15/bin/clang
             - os : macos-14
               compiler: { cc: clang, cxx: clang++, version: 18 }
             - os : macos-15

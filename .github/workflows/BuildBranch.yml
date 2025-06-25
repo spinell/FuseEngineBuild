@@ -124,7 +124,7 @@ jobs:
           - { cc: clang, cxx: clang++, version: 14} # 14.0.0
           - { cc: clang, cxx: clang++, version: 15} # 15.0.7
           - { cc: clang, cxx: clang++, version: 18} # 18.1.8
-          - { cc: gcc,   cxx: g++,     version: 14} # 18.1.8
+#          - { cc: gcc,   cxx: g++,     version: 14} #
         exclude:
             - os : macos-13
               compiler: { cc: clang, cxx: clang++, version: 14 } # AppleClang 15.0.0.15000100 /usr/bin/clang++

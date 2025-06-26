@@ -1,0 +1,21 @@
+#############################################################
+#           Checkout the private repo
+#############################################################
+name: 'CheckoutFuseEngine'
+description: 'Clear GitHub action cache for a specific branch.'
+
+inputs:
+  branch:
+    description: 'The branch to checkout'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+   - name: Cloning FuseEngine ...
+     uses: actions/checkout@v4
+     with:
+      repository: spinell/FuseEngine
+      ref: ${{ inputs.branch }}
+      token: ${{ secrets.PAT }}
+      submodules: recursive

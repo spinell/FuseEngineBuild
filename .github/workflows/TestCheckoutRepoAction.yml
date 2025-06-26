@@ -1,0 +1,19 @@
+name: TestCheckoutRepoAction
+description: 'Test custom acton'
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'The branch to checkout'
+        type: string
+        default: 'dev'
+        required: true
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: ./.github/actions/clone-repo.yml
+        with:
+          branch: ${{ inputs.branch }}

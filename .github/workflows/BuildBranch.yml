@@ -15,6 +15,10 @@ on:
         type: 'boolean'
         default: true
 
+  pull_request:
+    types:  opened
+    branches: main
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   linux:

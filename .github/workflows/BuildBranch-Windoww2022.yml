@@ -44,37 +44,44 @@ jobs:
         with:
           arch: amd64
 
-      - name: Dump Info
-        run: |
-          ninja.exe    --version
-          cmake.exe    --version
-          cl.exe       --version
-          clang.exe    --version
-          clang-cl.exe --version
+      - run: ninja.exe --version
+      - run: cmake.exe --version
+      - run: clang.exe --version
 
       - name: Running cmake configure (cl)...
         run: |
           cmake --preset ninja-multi-config `
             -B ./build-cl `
-            -CMAKE_C_COMPILER=cl.exe `
-            -CMAKE_CXX_COMPILER=cl.exe `
+            -DCMAKE_C_COMPILER=cl.exe `
+            -DCMAKE_CXX_COMPILER=cl.exe `
             -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake `
             -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
+
+      - run: cmake --build    ./build-cl --config       ${{ matrix.buildConfig }}
+      - run: ctest --test-dir ./build-cl --build-config ${{ matrix.buildConfig }} --rerun-failed --output-on-failure
+      - run: cmake --install. ./build-cl --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}
 
       - name: Running cmake configure ...
         run: |
           cmake --preset ninja-multi-config (clang-cl) `
             -B ./build-clang-cl `
-            -CMAKE_C_COMPILER=clang-cl.exe `
-            -CMAKE_CXX_COMPILER=clang-cl.exe `
+            -DCMAKE_C_COMPILER=clang-cl.exe `
+            -DCMAKE_CXX_COMPILER=clang-cl.exe `
             -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake `
             -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
+      - run: cmake --build    ./build-clang-cl --config       ${{ matrix.buildConfig }}
+      - run: ctest --test-dir ./build-clang-cl --build-config ${{ matrix.buildConfig }} --rerun-failed --output-on-failure
+      - run: cmake --install. ./build-clang-cl --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}
+
 
       - name: Running cmake configure (clang)...
         run: |
           cmake --preset ninja-multi-config `
             -B ./build-clang `
-            -CMAKE_C_COMPILER=clang.exe `
-            -CMAKE_CXX_COMPILER=clang.exe `
+            -DCMAKE_C_COMPILER=clang.exe `
+            -DCMAKE_CXX_COMPILER=clang.exe `
             -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake `
             -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
+      - run: cmake --build    ./build-clang --config       ${{ matrix.buildConfig }}
+      - run: ctest --test-dir ./build-clang --build-config ${{ matrix.buildConfig }} --rerun-failed --output-on-failure
+      - run: cmake --install. ./build-clang --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}

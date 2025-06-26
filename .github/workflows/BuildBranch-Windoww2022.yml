@@ -52,14 +52,14 @@ jobs:
         run: |
           cmake --preset ninja-multi-config `
             -B ./build-cl `
-            -DCMAKE_C_COMPILER=cl.exe `
-            -DCMAKE_CXX_COMPILER=cl.exe `
+            -DCMAKE_C_COMPILER=cl `
+            -DCMAKE_CXX_COMPILER=cl `
             -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake `
             -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
 
       - run: cmake --build    ./build-cl --config       ${{ matrix.buildConfig }}
       - run: ctest --test-dir ./build-cl --build-config ${{ matrix.buildConfig }} --rerun-failed --output-on-failure
-      - run: cmake --install. ./build-cl --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}
+      - run: cmake --install  ./build-cl --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}
 
       - name: Running cmake configure ...
         run: |
@@ -71,7 +71,7 @@ jobs:
             -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
       - run: cmake --build    ./build-clang-cl --config       ${{ matrix.buildConfig }}
       - run: ctest --test-dir ./build-clang-cl --build-config ${{ matrix.buildConfig }} --rerun-failed --output-on-failure
-      - run: cmake --install. ./build-clang-cl --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}
+      - run: cmake --install  ./build-clang-cl --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}
 
 
       - name: Running cmake configure (clang)...
@@ -84,4 +84,4 @@ jobs:
             -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
       - run: cmake --build    ./build-clang --config       ${{ matrix.buildConfig }}
       - run: ctest --test-dir ./build-clang --build-config ${{ matrix.buildConfig }} --rerun-failed --output-on-failure
-      - run: cmake --install. ./build-clang --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}
+      - run: cmake --install  ./build-clang --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}

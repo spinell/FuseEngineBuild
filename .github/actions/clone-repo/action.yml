@@ -19,3 +19,4 @@ runs:
       ref: ${{ inputs.branch }}
       token: ${{ secrets.PAT }}
       submodules: recursive
+      fetch-depth: 0

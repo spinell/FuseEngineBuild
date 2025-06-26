@@ -14,6 +14,12 @@ jobs:
   linux:
     runs-on: ubuntu-24.04
     steps:
+      # Clone the repo (Required to use custom action in this repo)
+      - name: Cloning this repo
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+          fetch-depth: 0
       - uses: ./.github/actions/clone-repo
         with:
           branch: ${{ inputs.branch }}

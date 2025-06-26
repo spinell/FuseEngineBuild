@@ -1,0 +1,80 @@
+################################################################################
+# TOTO concurrency
+################################################################################
+name: Build-Branch-Windows2022
+description: 'Performs a build branch on windows 2022'
+
+
+on:
+  workflow_dispatch:
+    inputs:
+      warningsAsErrors:
+        description: 'Build with warnings as errors'
+        required: true
+        type: 'boolean'
+        default: true
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  windows:
+    name: Windows-2022-${{ matrix.buildConfig }}
+    runs-on: Windows-2022
+    strategy:
+      fail-fast: false # if one job in the matrix fail, don't cancel other jobs inthe matr
+      matrix:
+        buildConfig: [Debug, RelWithDebInfo, Release]
+    env:
+        BUILD_DIR: "build/ninja-multi-config"
+        INSTALL_DIR: "install/ninja-multi-config"
+
+    steps:
+      # Clone the repo
+      - name: Checkout FuseEngine
+        uses: actions/checkout@v4
+        with:
+          repository: spinell/FuseEngine
+          ref: dev
+          token: ${{ secrets.PAT }}
+          submodules: recursive
+
+      # setup MSVC shell
+      - name: Set Visual Studio command line
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
+
+      - name: Dump Info
+        run: |
+          ninja.exe    --version
+          cmake.exe    --version
+          cl.exe       --version
+          clang.exe    --version
+          clang-cl.exe --version
+
+      - name: Running cmake configure (cl)...
+        run: |
+          cmake --preset ninja-multi-config `
+            -B ./build-cl `
+            -CMAKE_C_COMPILER=cl.exe `
+            -CMAKE_CXX_COMPILER=cl.exe `
+            -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake `
+            -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
+
+      - name: Running cmake configure ...
+        run: |
+          cmake --preset ninja-multi-config (clang-cl) `
+            -B ./build-clang-cl `
+            -CMAKE_C_COMPILER=clang-cl.exe `
+            -CMAKE_CXX_COMPILER=clang-cl.exe `
+            -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake `
+            -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
+
+      - name: Running cmake configure (clang)...
+        run: |
+          cmake --preset ninja-multi-config `
+            -B ./build-clang `
+            -CMAKE_C_COMPILER=clang.exe `
+            -CMAKE_CXX_COMPILER=clang.exe `
+            -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake `
+            -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}

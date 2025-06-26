@@ -23,4 +23,4 @@ jobs:
       - uses: ./.github/actions/clone-repo
         with:
           branch: ${{ inputs.branch }}
-          github-token: ${{ github.token }}
+          github-token: ${{ secrets.PAT }}

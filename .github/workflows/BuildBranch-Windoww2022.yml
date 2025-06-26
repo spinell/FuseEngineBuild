@@ -65,8 +65,8 @@ jobs:
         run: |
           cmake --preset ninja-multi-config (clang-cl) `
             -B ./build-clang-cl `
-            -DCMAKE_C_COMPILER=clang-cl.exe `
-            -DCMAKE_CXX_COMPILER=clang-cl.exe `
+            -DCMAKE_C_COMPILER='clang-cl.exe' `
+            -DCMAKE_CXX_COMPILER='clang-cl.exe' `
             -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake `
             -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
       - run: cmake --build    ./build-clang-cl --config       ${{ matrix.buildConfig }}
@@ -78,8 +78,8 @@ jobs:
         run: |
           cmake --preset ninja-multi-config `
             -B ./build-clang `
-            -DCMAKE_C_COMPILER=clang.exe `
-            -DCMAKE_CXX_COMPILER=clang.exe `
+            -DCMAKE_C_COMPILER='clang.exe' `
+            -DCMAKE_CXX_COMPILER='clang.exe' `
             -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake `
             -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
       - run: cmake --build    ./build-clang --config       ${{ matrix.buildConfig }}

@@ -89,7 +89,8 @@ jobs:
           token: ${{ secrets.PAT }}
           submodules: recursive
       - name: Dump Env powershell
-        run: dir env:
+        run: |
+          dir env:
       - name: Dump Env cmd
         shell: cmd
         run: SET

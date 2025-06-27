@@ -60,7 +60,7 @@ jobs:
             -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake `
             -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
 
-      - uses: ammaraskar/msvc-problem-matcher@0.3.0
+     #- uses: ammaraskar/msvc-problem-matcher@0.3.0
       - run: cmake --build    ${{ env.BUILD_DIR }} --config       ${{ matrix.buildConfig }}
       - run: ctest --test-dir ${{ env.BUILD_DIR }} --build-config ${{ matrix.buildConfig }} --rerun-failed --output-on-failure
       - run: cmake --install  ${{ env.BUILD_DIR }} --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}
@@ -104,7 +104,7 @@ jobs:
             -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake `
             -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
 
-      - uses: ammaraskar/msvc-problem-matcher@0.3.0
+    #  - uses: ammaraskar/msvc-problem-matcher@0.3.0
       - run: cmake --build    ${{ env.BUILD_DIR }} --config       ${{ matrix.buildConfig }}
       - run: ctest --test-dir ${{ env.BUILD_DIR }} --build-config ${{ matrix.buildConfig }} --rerun-failed --output-on-failure
       - run: cmake --install  ${{ env.BUILD_DIR }} --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}

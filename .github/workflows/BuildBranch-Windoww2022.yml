@@ -22,7 +22,7 @@ on:
 jobs:
 
   Windows-2022:
-    name: ${{ matrix.compiler }}-${{ matrix.buildConfig }}
+    name: 2022-${{ matrix.compiler }}-${{ matrix.buildConfig }}
     runs-on: Windows-2022
     strategy:
       fail-fast: false
@@ -66,7 +66,7 @@ jobs:
       - run: cmake --install  ${{ env.BUILD_DIR }} --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}
 
   Windows-2025:
-    name: ${{ matrix.compiler }}-${{ matrix.buildConfig }}
+    name: 2025-${{ matrix.compiler }}-${{ matrix.buildConfig }}
     runs-on: Windows-2025
     strategy:
       fail-fast: false

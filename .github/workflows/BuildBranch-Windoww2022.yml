@@ -96,7 +96,7 @@ jobs:
         uses: lukka/run-cmake@v10
         with:
           configurePreset: ${{ env.PRESET_NAME }}
-          configurePresetAdditionalArgs: "['-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}']"
+          configurePresetAdditionalArgs: "['-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake, -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}']"
 
   Windows-2025:
     name: 2025-${{ matrix.compiler }}-${{ matrix.buildConfig }}

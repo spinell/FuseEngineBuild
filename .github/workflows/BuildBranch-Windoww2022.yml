@@ -88,6 +88,11 @@ jobs:
           ref: dev
           token: ${{ secrets.PAT }}
           submodules: recursive
+      - name: Dump Env powershell
+        run: dir env:
+      - name: Dump Env cmd
+        shell: cmd
+        run: SET
 
       - name: Run CMake consuming CMakePreset.json and run vcpkg to build packages
         uses: lukka/run-cmake@v10

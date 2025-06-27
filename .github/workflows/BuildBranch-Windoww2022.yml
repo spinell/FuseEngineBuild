@@ -21,8 +21,8 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
-  windows:
-    name: Windows-2022-${{ matrix.compiler }}-${{ matrix.buildConfig }}
+  Windows-2022:
+    name: ${{ matrix.compiler }}-${{ matrix.buildConfig }}
     runs-on: Windows-2022
     strategy:
       fail-fast: false

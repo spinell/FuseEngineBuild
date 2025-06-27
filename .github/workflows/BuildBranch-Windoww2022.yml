@@ -77,7 +77,7 @@ jobs:
         PRESET_NAME: x64-windows-${{ matrix.compiler }}-${{ matrix.buildConfig }}
         BUILD_DIR: "build/${{ matrix.compiler }}-${{ matrix.buildConfig }}"
         INSTALL_DIR: "install/${{ matrix.compiler }}-${{ matrix.buildConfig }}"
-        #VCPKG_ROOT: "C:/vcpkg"
+        VCPKG_ROOT: "C:/vcpkg"
 
     steps:
       # Clone the repo
@@ -88,9 +88,6 @@ jobs:
           ref: dev
           token: ${{ secrets.PAT }}
           submodules: recursive
-      - name: Dump Env powershell
-        run: |
-          dir env:
       - name: Dump Env cmd
         shell: cmd
         run: SET

@@ -78,7 +78,6 @@ jobs:
         BUILD_DIR: "build/${{ matrix.compiler }}-${{ matrix.buildConfig }}"
         INSTALL_DIR: "install/${{ matrix.compiler }}-${{ matrix.buildConfig }}"
         VCPKG_ROOT: "C:/vcpkg"
-
     steps:
       # Clone the repo
       - name: Checkout FuseEngine
@@ -94,9 +93,19 @@ jobs:
 
       - name: Run CMake consuming CMakePreset.json and run vcpkg to build packages
         uses: lukka/run-cmake@v10
+        env:
+          VCPKG_ROOT: "C:/vcpkg" # run-cmake only invoke msvc shell when VCPKG_ROOT is defined.
         with:
           configurePreset: ${{ env.PRESET_NAME }}
-          configurePresetAdditionalArgs: "['-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake', '-DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}']"
+          configurePresetAdditionalArgs: >
+            "[
+              '-B ${{ env.BUILD_DIR }}',
+              '-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake',
+              '-DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}'
+            ]"
+      - run: cmake --build    ${{ env.BUILD_DIR }} --config       ${{ matrix.buildConfig }}
+      - run: ctest --test-dir ${{ env.BUILD_DIR }} --build-config ${{ matrix.buildConfig }} --rerun-failed --output-on-failure
+      - run: cmake --install  ${{ env.BUILD_DIR }} --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}
 
   Windows-2025:
     name: 2025-${{ matrix.compiler }}-${{ matrix.buildConfig }}

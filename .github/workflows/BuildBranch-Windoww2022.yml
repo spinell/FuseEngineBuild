@@ -27,10 +27,12 @@ jobs:
     strategy:
       fail-fast: false # if one job in the matrix fail, don't cancel other jobs inthe matr
       matrix:
-        buildConfig: [Debug, RelWithDebInfo, Release]
+        buildConfig: [debug, relwithdebinfo, release]
+        compiler:    [msvc,  msvc-clang, msvc-clang-cl]
     env:
-        BUILD_DIR: "build/ninja-multi-config"
-        INSTALL_DIR: "install/ninja-multi-config"
+        PRESET_NAME: x64-windows-${{ matrix.compiler }}-${{ matrix.buildConfig }}
+        BUILD_DIR: "build/${{ matrix.compiler }}-${{ matrix.buildConfig }}"
+        INSTALL_DIR: "install/${{ matrix.compiler }}-${{ matrix.buildConfig }}"
 
     steps:
       # Clone the repo
@@ -51,42 +53,14 @@ jobs:
       - run: ninja.exe --version
       - run: cmake.exe --version
       - run: clang.exe --version
-
-      - name: Running cmake configure (cl)...
+      - name: Running cmake configure ${{ env.PRESET_NAME }} ...
         run: |
-          cmake --preset ninja-multi-config `
-            -B ./build-cl `
-            -DCMAKE_C_COMPILER=cl `
-            -DCMAKE_CXX_COMPILER=cl `
+          cmake --preset ${{ env.PRESET_NAME }} `
+            -B ${{ env.BUILD_DIR }} `
             -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake `
             -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
 
       - uses: ammaraskar/msvc-problem-matcher@0.3.0
-      - run: cmake --build    ./build-cl --config       ${{ matrix.buildConfig }}
-      - run: ctest --test-dir ./build-cl --build-config ${{ matrix.buildConfig }} --rerun-failed --output-on-failure
-      - run: cmake --install  ./build-cl --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}
-
-      - name: Running cmake configure ...
-        run: |
-          cmake --preset ninja-multi-config (clang-cl) `
-            -B ./build-clang-cl `
-            -DCMAKE_C_COMPILER='clang-cl.exe' `
-            -DCMAKE_CXX_COMPILER='clang-cl.exe' `
-            -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake `
-            -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
-      - run: cmake --build    ./build-clang-cl --config       ${{ matrix.buildConfig }}
-      - run: ctest --test-dir ./build-clang-cl --build-config ${{ matrix.buildConfig }} --rerun-failed --output-on-failure
-      - run: cmake --install  ./build-clang-cl --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}
-
-
-      - name: Running cmake configure (clang)...
-        run: |
-          cmake --preset ninja-multi-config `
-            -B ./build-clang `
-            -DCMAKE_C_COMPILER='clang.exe' `
-            -DCMAKE_CXX_COMPILER='clang.exe' `
-            -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake `
-            -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
-      - run: cmake --build    ./build-clang --config       ${{ matrix.buildConfig }}
-      - run: ctest --test-dir ./build-clang --build-config ${{ matrix.buildConfig }} --rerun-failed --output-on-failure
-      - run: cmake --install  ./build-clang --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}
+      - run: cmake --build    ${{ env.BUILD_DIR }} --config       ${{ matrix.buildConfig }}
+      - run: ctest --test-dir ${{ env.BUILD_DIR }} --build-config ${{ matrix.buildConfig }} --rerun-failed --output-on-failure
+      - run: cmake --install  ${{ env.BUILD_DIR }} --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}

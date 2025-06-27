@@ -22,10 +22,10 @@ on:
 jobs:
 
   windows:
-    name: Windows-2022-${{ matrix.buildConfig }}
+    name: Windows-2022-${{ matrix.compiler }}-${{ matrix.buildConfig }}
     runs-on: Windows-2022
     strategy:
-      fail-fast: false # if one job in the matrix fail, don't cancel other jobs inthe matr
+      fail-fast: false
       matrix:
         buildConfig: [debug, relwithdebinfo, release]
         compiler:    [msvc,  msvc-clang, msvc-clang-cl]

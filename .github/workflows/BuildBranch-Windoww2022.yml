@@ -97,7 +97,7 @@ jobs:
           VCPKG_ROOT: "C:/vcpkg" # run-cmake only invoke msvc shell when VCPKG_ROOT is defined.
         with:
           configurePreset: ${{ env.PRESET_NAME }}
-          configurePresetAdditionalArgs: >
+          configurePresetAdditionalArgs: >-
             "[
               '-B ${{ env.BUILD_DIR }}',
               '-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake',

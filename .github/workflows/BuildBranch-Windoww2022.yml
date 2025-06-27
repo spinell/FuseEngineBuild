@@ -72,7 +72,7 @@ jobs:
       fail-fast: false
       matrix:
         buildConfig: [debug]
-        compiler:    [msvc]
+        compiler:    [msvc, msvc-clang, msvc-clang-cl]
     env:
         PRESET_NAME: x64-windows-${{ matrix.compiler }}-${{ matrix.buildConfig }}
         BUILD_DIR: "build/${{ matrix.compiler }}-${{ matrix.buildConfig }}"

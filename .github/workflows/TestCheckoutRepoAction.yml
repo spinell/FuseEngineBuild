@@ -14,7 +14,9 @@ jobs:
   linux:
     runs-on: ubuntu-24.04
     steps:
+      - run: pwd
       - run: mkdir $HOME/ThisRepo
+
       # Clone the repo (Required to use custom action in this repo)
       - name: Cloning this repo
         uses: actions/checkout@v4
@@ -23,7 +25,8 @@ jobs:
           submodules: false
           fetch-depth: 0
 
-      - run: ls -ls $HOME/ThisRepo
+      - run: pwd
+      - run: ls -la $HOME/ThisRepo
 
       - name: Cloning FuseEngine
         uses: ./.github/actions/clone-repo
@@ -31,4 +34,4 @@ jobs:
           branch: ${{ inputs.branch }}
           github-token: ${{ secrets.PAT }}
 
-      - run: ls -ls $PWD
+      - run: pwd

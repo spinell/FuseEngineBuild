@@ -102,10 +102,10 @@ jobs:
         env:
           VCPKG_INSTALLED_DIR: vcpkg_installed
         with:
-          vcpkgDirectory: '${{ github.workspace }}/vcpkg_'
+          vcpkgDirectory: '/usr/local/share/vcpkg'
           runVcpkgInstall: true
-          doNotUpdateVcpkg: false
-          doNotCache: false
+          doNotUpdateVcpkg: true
+          doNotCache: true # this is broken ? Failed to save: reserveCache failed: Cache service responded with 503
           runVcpkgFormatString: '[`install`, `--x-feature=build-tests`, `--recurse`, `--clean-after-build`, `--x-install-root`, `$[env.VCPKG_INSTALLED_DIR]`, `--triplet`, `$[env.VCPKG_DEFAULT_TRIPLET]`]'
         if: ${{ inputs.vcpkg == 'runVcpkg' }}
 

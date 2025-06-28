@@ -88,12 +88,12 @@ jobs:
         uses: lukka/run-vcpkg@v11
         env:
           VCPKG_INSTALLED_DIR: vcpkg_installed
-          VCPKG_FEATURE_FLAGS: build-tests
         with:
           vcpkgDirectory: '${{ github.workspace }}/vcpkg_'
           runVcpkgInstall: true
           doNotUpdateVcpkg: false
           doNotCache: true
+          runVcpkgFormatString: '[`install`, `--x-feature=build-tests`, `--recurse`, `--clean-after-build`, `--x-install-root`, `$[env.VCPKG_INSTALLED_DIR]`, `--triplet`, `$[env.VCPKG_DEFAULT_TRIPLET]`]'
 
 
       #

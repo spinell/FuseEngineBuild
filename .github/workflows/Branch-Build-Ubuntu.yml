@@ -48,6 +48,19 @@ jobs:
         INSTALL_DIR: "install/${{github.event.inputs.configType}}"
 
     steps:
+      - name: Dump Init state
+        run: |
+            echo Workind directory : $(pwd)
+            echo Home              : $HOME
+            echo cmake path        : $(which cmak
+            echo cmake version     : $(cmake --version)
+            echo cmake path        : $(which cmake)
+            echo cmake version     : $(cmake --version)
+            echo gcc path          : $(which gcc)
+            echo gcc version       : $(gcc --version)
+            echo clang path        : $(which clang)
+            echo clang version     : $(clang --version)
+
       - name: Dump GitGub context
         run: echo "${{ toJson(github) }}"
 

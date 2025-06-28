@@ -38,6 +38,13 @@ on:
          required: true
          type: 'boolean'
          default: false
+       vcpkg:
+         description: 'How to setup vcpkg'
+         type: choice
+         options:
+           - runVcpkg
+           - none
+         default: none
 
 jobs:
   build:
@@ -79,11 +86,15 @@ jobs:
           submodules: recursive
 
       #
-      # Run vcpkg
+      #  Run the pre installed vcpkg
       #
-      #- name: Run vcpkg
-      #  run:  vcpkg  install --no-print-usage --x-feature=build-tests --x-install-root=vcpkg_installed
+      - name: Run vcpkg
+        run:  vcpkg  install --no-print-usage --x-feature=build-tests --x-install-root=vcpkg_installed
+        if: ${{ inputs.vcpkg }} == 'none'
 
+      #
+      #  Run vcpkg run-vcpkg
+      #
       - name: run-vcpk
         uses: lukka/run-vcpkg@v11
         env:
@@ -94,7 +105,7 @@ jobs:
           doNotUpdateVcpkg: false
           doNotCache: true
           runVcpkgFormatString: '[`install`, `--x-feature=build-tests`, `--recurse`, `--clean-after-build`, `--x-install-root`, `$[env.VCPKG_INSTALLED_DIR]`, `--triplet`, `$[env.VCPKG_DEFAULT_TRIPLET]`]'
-
+        if: ${{ inputs.vcpkg }} == 'runVcpkg'
 
       #
       # cmake configure

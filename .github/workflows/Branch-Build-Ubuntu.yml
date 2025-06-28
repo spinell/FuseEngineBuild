@@ -90,7 +90,7 @@ jobs:
       #
       - name: Run vcpkg
         run:  vcpkg  install --no-print-usage --x-feature=build-tests --x-install-root=vcpkg_installed
-        if: ${{ inputs.vcpkg }} == 'none'
+        if: ${{ inputs.vcpkg == 'none' }}
 
       #
       #  Run vcpkg run-vcpkg
@@ -105,7 +105,7 @@ jobs:
           doNotUpdateVcpkg: false
           doNotCache: true
           runVcpkgFormatString: '[`install`, `--x-feature=build-tests`, `--recurse`, `--clean-after-build`, `--x-install-root`, `$[env.VCPKG_INSTALLED_DIR]`, `--triplet`, `$[env.VCPKG_DEFAULT_TRIPLET]`]'
-        if: ${{ inputs.vcpkg }} == 'runVcpkg'
+        if: ${{ inputs.vcpkg == 'runVcpkg' }}
 
       #
       # cmake configure

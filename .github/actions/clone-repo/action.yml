@@ -12,6 +12,10 @@ inputs:
     description: The GitHub token to use.
     required: true
 
+  github-token:
+    path: Where to clone.
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -21,5 +25,6 @@ runs:
       repository: spinell/FuseEngine
       ref: ${{ inputs.branch }}
       token: ${{ inputs.github-token }}
+      path: ${{ inputs.path }}
       submodules: recursive
       fetch-depth: 0

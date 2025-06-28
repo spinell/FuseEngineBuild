@@ -105,7 +105,7 @@ jobs:
           vcpkgDirectory: '${{ github.workspace }}/vcpkg_'
           runVcpkgInstall: true
           doNotUpdateVcpkg: false
-          doNotCache: true
+          doNotCache: false
           runVcpkgFormatString: '[`install`, `--x-feature=build-tests`, `--recurse`, `--clean-after-build`, `--x-install-root`, `$[env.VCPKG_INSTALLED_DIR]`, `--triplet`, `$[env.VCPKG_DEFAULT_TRIPLET]`]'
         if: ${{ inputs.vcpkg == 'runVcpkg' }}
 

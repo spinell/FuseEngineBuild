@@ -1,3 +1,10 @@
+name: Test
+run-name: Test-RunName
+description: Test description
+env:
+  MY_GLOBAL_ENV: YO
+
+
 on:
   workflow_dispatch:
     inputs:
@@ -18,10 +25,6 @@ on:
         description: 'Test scenario tags'
         required: true
         type: string
-      environment:
-        description: 'Environment to run tests against'
-        type: environment
-        required: true
 
 jobs:
   print-tag:
@@ -30,3 +33,40 @@ jobs:
     steps:
       - name: Print the input tag to STDOUT
         run: echo  The tags are ${{ inputs.tags }}
+
+  print:
+    runs-on: ubuntu-24.04
+    if: ${{ inputs.print_tags }}
+    steps:
+      - name: Display stuffs
+        run: |
+          echo ================================================
+          env
+          echo ================================================
+
+      - name: Display inputs
+        run: |
+          echo The tags are ${{ inputs.tags }}
+          echo The tags are ${{ github.event.inputs.tags }}
+          echo Log level ${{ inputs.logLevel }}
+          echo Log level ${{ github.event.inputs.logLevel }}
+          echo print_tags ${{ inputs.print_tags }}
+          echo print_tags ${{ github.event.inputs.print_tags }}
+
+      - name: Print annotation
+        run: |
+          # See https://docs.github.com/en/actions/how-tos/monitoring-and-troubleshooting-workflows/troubleshooting-workflows/enabling-debug-logging
+          echo "::debug::This is a debug message!"
+
+          echo "::notice file=app.js,line=1,col=5,endColumn=7::Missing semicolon"
+          echo "::warning file=app.js,line=1,col=5,endColumn=7,title=YOUR-TITLE::Missing semicolon"
+          echo "::error file=app.js,line=1,col=5,endColumn=7,title=YOUR-TITLE::Missing semicolon"
+
+          echo "::group::My title"
+          echo "Inside group"
+          echo "::warning Inside group"
+          echo "Inside group"
+          echo "::endgroup::"
+
+
+          echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY

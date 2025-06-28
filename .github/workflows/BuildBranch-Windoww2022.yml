@@ -99,7 +99,11 @@ jobs:
 
       - name: Run CMake consuming CMakePreset.json and run vcpkg to build packages
         uses: lukka/run-cmake@v10
-        #env:
+        env:
+          # define CC and CXX to avoid run-cmake to inject the msvc shell if VCPKG_ROOT is defined.
+          # https://github.com/lukka/run-cmake-vcpkg-action-libs/blob/main/packages/run-cmake-lib/src/cmake-utils.ts
+          CC:  NotUsed
+          CXX: NotUsed
         #  VCPKG_ROOT: "C:/vcpkg" # run-cmake only invoke msvc shell when VCPKG_ROOT is defined.
         #
         with:

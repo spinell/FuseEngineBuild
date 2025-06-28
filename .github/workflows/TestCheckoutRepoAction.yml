@@ -18,9 +18,16 @@ jobs:
       - name: Cloning this repo
         uses: actions/checkout@v4
         with:
+          path: $HOME/ThisRepo
           submodules: false
           fetch-depth: 0
-      - uses: ./.github/actions/clone-repo
+
+      - run: ls -ls $HOME/ThisRepo
+
+      - name: Cloning FuseEngine
+        uses: ./.github/actions/clone-repo
         with:
           branch: ${{ inputs.branch }}
           github-token: ${{ secrets.PAT }}
+
+      - run: ls -ls $PWD

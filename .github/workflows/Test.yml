@@ -40,9 +40,16 @@ jobs:
     steps:
       - name: Display stuffs
         run: |
-          echo ================================================
+          echo =============     ENV    =================
           env
           echo ================================================
+
+          echo HOME: $HOME
+          which ninja
+          which cmake
+          which gcc
+          which clang
+
 
       - name: Display inputs
         run: |

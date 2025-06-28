@@ -14,6 +14,7 @@ jobs:
   linux:
     runs-on: ubuntu-24.04
     steps:
+      - run: mkdir $HOME/ThisRepo
       # Clone the repo (Required to use custom action in this repo)
       - name: Cloning this repo
         uses: actions/checkout@v4

@@ -129,6 +129,39 @@ jobs:
       - run: ctest --test-dir ${{ env.BUILD_DIR }} --build-config ${{ matrix.buildConfig }} --rerun-failed --output-on-failure
       - run: cmake --install  ${{ env.BUILD_DIR }} --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}
 
+  runCMake-Ubuntu:
+    name: runCMakeUbuntu-${{ matrix.compiler }}-${{ matrix.buildConfig }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        buildConfig: [debug]
+        compiler:    [gcc14, clang18, clang19]
+    env:
+        PRESET_NAME: x64-linux-${{ matrix.compiler }}-${{ matrix.buildConfig }}
+        BUILD_DIR: "build/${{ matrix.compiler }}-${{ matrix.buildConfig }}"
+        INSTALL_DIR: "install/${{ matrix.compiler }}-${{ matrix.buildConfig }}"
+    steps:
+      # Clone the repo
+      - name: Checkout FuseEngine
+        uses: actions/checkout@v4
+        with:
+          repository: spinell/FuseEngine
+          ref: dev
+          token: ${{ secrets.PAT }}
+          submodules: recursive
+
+      - name: Run CMake consuming CMakePreset.json and run vcpkg to build packages
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: ${{ env.PRESET_NAME }}
+          configurePresetAdditionalArgs: "[ '-B ${{ env.BUILD_DIR }}', '-DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake', '-DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}', '--log-level=DEBUG' ]"
+
+      - run: cmake --build    ${{ env.BUILD_DIR }} --config       ${{ matrix.buildConfig }}
+      - run: ctest --test-dir ${{ env.BUILD_DIR }} --build-config ${{ matrix.buildConfig }} --rerun-failed --output-on-failure
+      - run: cmake --install  ${{ env.BUILD_DIR }} --prefix       ${{ env.INSTALL_DIR}}     --config ${{ matrix.buildConfig }}
+
+
   Windows-2025:
     name: 2025-${{ matrix.compiler }}-${{ matrix.buildConfig }}
     runs-on: Windows-2025

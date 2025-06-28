@@ -87,7 +87,7 @@ jobs:
       - name: run-vcpk
         uses: lukka/run-vcpkg@v11
         with:
-            vcpkgDirectory: /home/vcpkg  # TODO use $VCPKG_INSTALLATION_ROOT
+            vcpkgDirectory: '${{ github.workspace }}/vcpkg_'
 
       #
       # cmake configure

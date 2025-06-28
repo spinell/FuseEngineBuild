@@ -81,8 +81,11 @@ jobs:
       #
       # Run vcpkg
       #
-      - name: Run vcpkg
-        run:  vcpkg  install --no-print-usage --x-feature=build-tests --x-install-root=vcpkg_installed
+      #- name: Run vcpkg
+      #  run:  vcpkg  install --no-print-usage --x-feature=build-tests --x-install-root=vcpkg_installed
+
+      - name: run-vcpk
+        uses: lukka/run-vcpkg@v11
 
       #
       # cmake configure

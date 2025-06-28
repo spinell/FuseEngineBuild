@@ -86,9 +86,14 @@ jobs:
 
       - name: run-vcpk
         uses: lukka/run-vcpkg@v11
+        env:
+          DVCPKG_INSTALLED_DIR: vcpkg_installed
         with:
-            vcpkgDirectory: '${{ github.workspace }}/vcpkg_'
-            runVcpkgInstall: true
+          vcpkgDirectory: '${{ github.workspace }}/vcpkg_'
+          runVcpkgInstall: true
+          doNotUpdateVcpkg: false
+          doNotCache: true
+
 
       #
       # cmake configure

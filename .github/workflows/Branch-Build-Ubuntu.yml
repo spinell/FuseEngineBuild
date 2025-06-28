@@ -1,0 +1,103 @@
+################################################################################
+#
+# TODO: vcpkg caching
+# TODO: upload artifact
+# TODO: test summary
+# TODO: Parse cmake         error/warning
+# TODO: Parse GCC           error/warning
+# TODO: Parse Clang/ClangCL error/warning
+# TODO: cancel running job
+#
+#################################################################################
+name: Branch Build Ubuntu
+description: Build on ubuntu
+run-name: Branch Build Ubuntu (${{github.event.inputs.configType}})
+
+
+on:
+  workflow_dispatch :
+    inputs:
+       configType:
+         description: 'The build configuration'
+         required: true
+         type: choice
+         options:
+           - debug
+           - relwithdebinfo
+           - release
+         default: release
+       cppStandard:
+         description: 'The C++ standard to use'
+         type: choice
+         options:
+           - 20
+           - 23
+         default: '20'
+       warningsAsErrors:
+         description: 'Build with warnings as errors'
+         required: true
+         type: 'boolean'
+         default: false
+
+jobs:
+  build:
+    name: build-${{github.event.inputs.configType}}
+    runs-on: ubuntu-24.04
+    env:
+        BUILD_DIR: "build/${{github.event.inputs.configType}}"
+        INSTALL_DIR: "install/${{github.event.inputs.configType}}"
+
+    steps:
+      - name: Dump GitGub context
+        run: echo "${{ toJson(github) }}"
+
+      #
+      # Clone the repo
+      #
+      - name: Checkout FuseEngine
+        uses: actions/checkout@v4
+        with:
+          repository: spinell/FuseEngine
+          ref: dev
+          token: ${{ secrets.PAT }}
+          submodules: recursive
+
+      #
+      # Run vcpkg
+      #
+      - name: Run vcpkg
+        run:  vcpkg  install --no-print-usage --x-feature=build-tests --x-install-root=vcpkg_installed
+
+      #
+      # cmake configure
+      #
+      # Override the preset build directory with -B
+      # This is because we are not using preset for build/test.
+      #
+      - name: Run CMake Configure
+        run: |
+          export VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT
+          cmake -B ${{env.BUILD_DIR}} \
+            --preset x64-linux-gcc14-${{github.event.inputs.configType}} \
+            -DVCPKG_MANIFEST_INSTALL=OFF  \
+            -DVCPKG_INSTALLED_DIR=vcpkg_installed \
+            -DCMAKE_CXX_STANDARD=${{ github.event.inputs.cppStandard }} \
+            -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ github.event.inputs.warningsAsErrors }}
+
+      #
+      # build
+      #
+      - name: Build
+        run: cmake --build ${{env.BUILD_DIR}}
+
+      #
+      # run test
+      #
+      - name: Run test
+        run: ctest --test-dir ${{env.BUILD_DIR}} --rerun-failed --output-on-failure
+
+      #
+      # run cmake install
+      #
+      - name: Install
+        run: cmake --install ${{env.BUILD_DIR}} --prefix ${{env.INSTALL_DIR}}

@@ -132,10 +132,24 @@ jobs:
         run: cmake --build ${{env.BUILD_DIR}}
 
       #
-      # run test
+      # run ctest and ouput the result into a JUnit format file (xml).
       #
       - name: Run test
-        run: ctest --test-dir ${{env.BUILD_DIR}} --rerun-failed --output-on-failure
+        run: |
+         ctest --test-dir ${{env.BUILD_DIR}} \
+          --rerun-failed  \
+          --output-on-failure  \
+          --output-junit ${{env.BUILD_DIR}}/ctest-test-Summary.xml
+
+      #
+      # Create a test Summary that will be ouputed the workflow summary.
+      #
+      - name: Test Summary
+        uses: test-summary/action@v2
+        with:
+          paths: ${{env.BUILD_DIR}}/ctest-test-Summary.xml
+          show: "all"
+        if: always()
 
       #
       # run cmake install

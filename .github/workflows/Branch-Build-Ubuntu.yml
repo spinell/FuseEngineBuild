@@ -51,6 +51,9 @@ jobs:
       - name: Dump GitGub context
         run: echo "${{ toJson(github) }}"
 
+      - name: Dump runner
+        run: echo "${{ toJson(runner) }}"
+
       #
       # Clone the repo
       #

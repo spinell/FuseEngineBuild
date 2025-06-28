@@ -88,6 +88,7 @@ jobs:
         uses: lukka/run-vcpkg@v11
         env:
           VCPKG_INSTALLED_DIR: vcpkg_installed
+          VCPKG_FEATURE_FLAGS: build-tests
         with:
           vcpkgDirectory: '${{ github.workspace }}/vcpkg_'
           runVcpkgInstall: true

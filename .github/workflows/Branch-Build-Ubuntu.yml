@@ -52,7 +52,7 @@ jobs:
         run: |
             echo Workind directory : $(pwd)
             echo Home              : $HOME
-            echo cmake path        : $(which cmak
+            echo cmake path        : $(which cmake)
             echo cmake version     : $(cmake --version)
             echo cmake path        : $(which cmake)
             echo cmake version     : $(cmake --version)

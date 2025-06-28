@@ -94,6 +94,8 @@ jobs:
 
       #
       #  Run vcpkg run-vcpkg
+      #  - This will download vcpkg in ${{ github.workspace }}/vcpkg_ if not already there.
+      #    and use the baseline from vcpkg.json to sync at theright commit.
       #
       - name: run-vcpk
         uses: lukka/run-vcpkg@v11

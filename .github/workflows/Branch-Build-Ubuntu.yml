@@ -135,11 +135,12 @@ jobs:
       # run ctest and ouput the result into a JUnit format file (xml).
       #
       - name: Run test
+        working-directory: ${{env.BUILD_DIR}}
         run: |
-         ctest --test-dir ${{env.BUILD_DIR}} \
+         ctest \
           --rerun-failed  \
           --output-on-failure  \
-          --output-junit ${{env.BUILD_DIR}}/ctest-test-Summary.xml
+          --output-junit ctest-test-Summary.xml
 
       #
       # Create a test Summary that will be ouputed the workflow summary.

@@ -11,9 +11,8 @@ inputs:
   github-token:
     description: The GitHub token to use.
     required: true
-
-  github-token:
-    path: Where to clone.
+  path:
+    description: Where to clone.
     required: true
 
 runs:

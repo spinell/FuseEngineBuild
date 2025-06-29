@@ -151,17 +151,17 @@ jobs:
       - name: Create test summary Markdown
         uses: test-summary/action@v2.4
         with:
-          paths: ${{env.BUILD_DIR}}/ctest-test-Summary.xml
-          output:  ${{env.BUILD_DIR}}/ctest-test-Summary.md
+          paths: ${{env.BUILD_DIR}}/tests/result/*.xml
+          #output:  ${{env.BUILD_DIR}}/ctest-test-Summary.md
           show: "fail, skip"
         if: always()
 
       #
       # run cmake install
       #
-      - name: Install
-        run: cat ${{env.BUILD_DIR}}/ctest-test-Summary.md
-        if: always()
+      #- name: Install
+      #  run: cat ${{env.BUILD_DIR}}/ctest-test-Summary.md
+      #  if: always()
 
       #
       # run cmake install

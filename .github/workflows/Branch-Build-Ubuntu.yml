@@ -152,16 +152,21 @@ jobs:
         uses: test-summary/action@v2.4
         with:
           paths: ${{env.BUILD_DIR}}/tests/result/*.xml
-          #output:  ${{env.BUILD_DIR}}/ctest-test-Summary.md
-          show: "fail, skip"
+          output:  ${{env.BUILD_DIR}}/ctest-test-Summary.md
+          show: "all"
         if: always()
 
       #
-      # run cmake install
+      # Add the test result markdown file generatedin the previous step into the
+      # job summary
       #
-      #- name: Install
-      #  run: cat ${{env.BUILD_DIR}}/ctest-test-Summary.md
-      #  if: always()
+      - name:  Adding tests result to the job summary
+        run: |
+            echo "### Tests result:" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            cat "${{env.BUILD_DIR}}/ctest-test-Summary.md" >> $GITHUB_STEP_SUMMARY
+            echo "lol" >> $GITHUB_STEP_SUMMARY
+        if: always()
 
       #
       # run cmake install

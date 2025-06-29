@@ -151,8 +151,14 @@ jobs:
 
       - name: Generate ctrf report
         run: |
-          npx junit-to-ctrf ${{env.BUILD_DIR}}/tests/result/*.xml -o ctrf/ctest-test-summary.json
+          npx junit-to-ctrf ${{env.BUILD_DIR}}/ctest-test-Summary.xml -o ctrf/ctest-test-summary.json
           cat ctrf/ctest-test-summary.json
+        if: always()
+
+      - name: Publish Test Report
+        uses: ctrf-io/github-test-reporter@v1
+        with:
+          report-path: './ctrf/*.json'
         if: always()
 
       #

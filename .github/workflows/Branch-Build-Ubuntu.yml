@@ -69,6 +69,10 @@ jobs:
             echo "gcc version       : $(gcc --version)"
             echo "clang path        : $(which clang)"
             echo "clang version     : $(clang --version)"
+            echo "npm   path        : $(which npm)"
+            echo "npm   version     : $(npm --version)"
+            echo "npx   path        : $(which npx )"
+            echo "npx   version     : $(npx  --version)"
 
       - name: Dump GitGub context
         run: echo "${{ toJson(github) }}"
@@ -145,6 +149,9 @@ jobs:
           --progress \
           --output-junit ctest-test-Summary.xml
 
+          npx junit-to-ctrf ${{env.BUILD_DIR}}/tests/result/*.xml -o ctrf/ctest-test-summary.json
+          cat ctrf/ctest-test-summary.json
+
       #
       # Create a test summary that will be ouputed the workflow summary.
       # This step always run even if the previous step fail.
@@ -180,7 +187,10 @@ jobs:
             echo "### Tests result (GTest):" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             cat  "${{env.BUILD_DIR}}/gtest-test-Summary.md" >> $GITHUB_STEP_SUMMARY
+
             echo "" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+
             echo "### Tests result (CTest):" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             cat "${{env.BUILD_DIR}}/ctest-test-Summary.md" >> $GITHUB_STEP_SUMMARY

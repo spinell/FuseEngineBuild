@@ -154,26 +154,26 @@ jobs:
         run: |
           npx junit-to-ctrf ${{env.BUILD_DIR}}/ctest-test-Summary.xml -o ctrf/ctest-test-summary.json
           cat ctrf/ctest-test-summary.json
-        if: always()
+        if: false
 
       - name: Publish Test Report (ctest)
         uses: ctrf-io/github-test-reporter@v1
         with:
           report-path: './ctrf/*.json'
-        if: always()
+        if: false
 
       - name: Generate ctrf report (GTest)
         run: |
           ls -la ${{env.BUILD_DIR}}/tests/result
           npx junit-to-ctrf ${{env.BUILD_DIR}}/tests/result/**/*.xml -o ctrf/gtest-test-summary.json
           cat ctrf/gtest-test-summary.json
-        if: always()
+        if: false
 
       - name: Publish Test Report (GTest)
         uses: ctrf-io/github-test-reporter@v1
         with:
           report-path: './ctrf/gtest-test-summary.json'
-        if: always()
+        if: false
 
       #
       # Create a test summary that will be ouputed the workflow summary.
@@ -186,7 +186,7 @@ jobs:
           paths: ${{env.BUILD_DIR}}/tests/result/*.xml
           output:  ${{env.BUILD_DIR}}/gtest-test-Summary.md
           show: "all"
-        if: always()
+        if: false
 
       - name: Create test summary Markdown (CTest)
         uses: test-summary/action@v2.4
@@ -194,7 +194,7 @@ jobs:
           paths: ${{env.BUILD_DIR}}/ctest-test-Summary.xml
           output:  ${{env.BUILD_DIR}}/ctest-test-Summary.md
           show: "all"
-        if: always()
+        if: false
 
       #
       # Add the test result markdown file generatedin the previous step into the
@@ -217,10 +217,11 @@ jobs:
             echo "### Tests result (CTest):" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             cat "${{env.BUILD_DIR}}/ctest-test-Summary.md" >> $GITHUB_STEP_SUMMARY
-        if: always()
+        if: false
 
       #
       # run cmake install
       #
       - name: Install
         run: cmake --install ${{env.BUILD_DIR}} --prefix ${{env.INSTALL_DIR}}
+        if: false

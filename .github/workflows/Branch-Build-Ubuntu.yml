@@ -2,7 +2,9 @@
 #
 # TODO: vcpkg caching
 # TODO: upload artifact
-# TODO: test summary        catch desabled test /cmake report
+# TODO: test summary
+#   cmake test that are disabled are not display
+#   ctest does not display gtest output  (xml system-out)
 # TODO: Parse cmake         error/warning
 # TODO: Parse GCC           error/warning
 # TODO: Parse Clang/ClangCL error/warning
@@ -177,8 +179,8 @@ jobs:
 
             echo "### Tests result (GTest):" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            cat "${{env.BUILD_DIR}}/gtest-test-Summary.md" >> $GITHUB_STEP_SUMMARY
-
+            cat  "${{env.BUILD_DIR}}/gtest-test-Summary.md" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
             echo "### Tests result (CTest):" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             cat "${{env.BUILD_DIR}}/ctest-test-Summary.md" >> $GITHUB_STEP_SUMMARY

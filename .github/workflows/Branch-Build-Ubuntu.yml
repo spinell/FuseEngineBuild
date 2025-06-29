@@ -134,6 +134,7 @@ jobs:
       #
       # build
       #
+      - uses: ammaraskar/gcc-problem-matcher@master
       - name: Build
         run: cmake --build ${{env.BUILD_DIR}}
 

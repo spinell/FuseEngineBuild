@@ -170,9 +170,9 @@ jobs:
       #
       - name:  Adding tests result to the job summary
         run: |
-            cat "==================== ctest ======================="
+            echo "==================== ctest ======================="
             cat ${{env.BUILD_DIR}}/ctest-test-Summary.md
-            cat "==================== gtest ======================="
+            echo "==================== gtest ======================="
             cat ${{env.BUILD_DIR}}/gtest-test-Summary.md
 
             echo "### Tests result (GTest):" >> $GITHUB_STEP_SUMMARY

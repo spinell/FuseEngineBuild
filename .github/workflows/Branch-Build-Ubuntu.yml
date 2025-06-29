@@ -153,6 +153,7 @@ jobs:
         run: |
           npx junit-to-ctrf ${{env.BUILD_DIR}}/tests/result/*.xml -o ctrf/ctest-test-summary.json
           cat ctrf/ctest-test-summary.json
+        if: always()
 
       #
       # Create a test summary that will be ouputed the workflow summary.

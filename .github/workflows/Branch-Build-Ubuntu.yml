@@ -143,13 +143,15 @@ jobs:
           --output-junit ctest-test-Summary.xml
 
       #
-      # Create a test Summary that will be ouputed the workflow summary.
+      # Create a test summary that will be ouputed the workflow summary.
+      # This step always run even if the previous step fail.
+      # This way, we can display test failling in the summary.
       #
       - name: Test Summary
         uses: test-summary/action@v2
         with:
           paths: ${{env.BUILD_DIR}}/ctest-test-Summary.xml
-          show: "all"
+          show: "fail, skip"
         if: always()
 
       #

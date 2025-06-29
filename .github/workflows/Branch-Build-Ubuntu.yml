@@ -149,16 +149,28 @@ jobs:
           --progress \
           --output-junit ctest-test-Summary.xml
 
-      - name: Generate ctrf report
+      - name: Generate ctrf report (ctest)
         run: |
           npx junit-to-ctrf ${{env.BUILD_DIR}}/ctest-test-Summary.xml -o ctrf/ctest-test-summary.json
           cat ctrf/ctest-test-summary.json
         if: always()
 
-      - name: Publish Test Report
+      - name: Publish Test Report (ctest)
         uses: ctrf-io/github-test-reporter@v1
         with:
           report-path: './ctrf/*.json'
+        if: always()
+
+      - name: Generate ctrf report (GTest)
+        run: |
+          npx junit-to-ctrf ${{env.BUILD_DIR}}/tests/result/*.xml -o ctrf/gtest-test-summary.json
+          cat ctrf/gtest-test-summary.json
+        if: always()
+
+      - name: Publish Test Report (GTest)
+        uses: ctrf-io/github-test-reporter@v1
+        with:
+          report-path: './ctrf/gtest-test-summary.json'
         if: always()
 
       #

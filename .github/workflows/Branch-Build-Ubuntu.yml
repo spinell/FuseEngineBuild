@@ -148,7 +148,7 @@ jobs:
       # This way, we can display test failling in the summary.
       #
       - name: Test Summary
-        uses: test-summary/action@v2
+        uses: test-summary/action@v2.4
         with:
           paths: ${{env.BUILD_DIR}}/ctest-test-Summary.xml
           show: "fail, skip"

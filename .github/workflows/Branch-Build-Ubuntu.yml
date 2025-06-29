@@ -148,7 +148,7 @@ jobs:
       # This step always run even if the previous step fail.
       # This way, we can display test failling in the summary.
       #
-      - name: Test Summary
+      - name: Create test summary Markdown
         uses: test-summary/action@v2.4
         with:
           paths: ${{env.BUILD_DIR}}/ctest-test-Summary.xml
@@ -161,6 +161,7 @@ jobs:
       #
       - name: Install
         run: cat ${{env.BUILD_DIR}}/ctest-test-Summary.md
+        if: always()
 
       #
       # run cmake install

@@ -163,6 +163,7 @@ jobs:
 
       - name: Generate ctrf report (GTest)
         run: |
+          ls -la ${{env.BUILD_DIR}}/tests/result
           npx junit-to-ctrf ${{env.BUILD_DIR}}/tests/result/*.xml -o ctrf/gtest-test-summary.json
           cat ctrf/gtest-test-summary.json
         if: always()

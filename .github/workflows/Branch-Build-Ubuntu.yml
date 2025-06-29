@@ -2,7 +2,7 @@
 #
 # TODO: vcpkg caching
 # TODO: upload artifact
-# TODO: test summary
+# TODO: test summary        catch desabled test /cmake report
 # TODO: Parse cmake         error/warning
 # TODO: Parse GCC           error/warning
 # TODO: Parse Clang/ClangCL error/warning
@@ -148,11 +148,19 @@ jobs:
       # This step always run even if the previous step fail.
       # This way, we can display test failling in the summary.
       #
-      - name: Create test summary Markdown
+      - name: Create test summary Markdown (GTest)
         uses: test-summary/action@v2.4
         with:
           paths: ${{env.BUILD_DIR}}/tests/result/*.xml
-          #output:  ${{env.BUILD_DIR}}/ctest-test-Summary.md
+          output:  ${{env.BUILD_DIR}}/gtest-test-Summary.md
+          show: "all"
+        if: always()
+
+      - name: Create test summary Markdown (CTest)
+        uses: test-summary/action@v2.4
+        with:
+          paths: ${{env.BUILD_DIR}}/ctest-test-Summary.xml
+          output:  ${{env.BUILD_DIR}}/ctest-test-Summary.md
           show: "all"
         if: always()
 
@@ -162,9 +170,16 @@ jobs:
       #
       - name:  Adding tests result to the job summary
         run: |
+            cat "==================== ctest ======================="
             cat ${{env.BUILD_DIR}}/ctest-test-Summary.md
+            cat "==================== gtest ======================="
+            cat ${{env.BUILD_DIR}}/gtest-test-Summary.md
 
-            echo "### Tests result:" >> $GITHUB_STEP_SUMMARY
+            echo "### Tests result (GTest):" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            cat "${{env.BUILD_DIR}}/gtest-test-Summary.md" >> $GITHUB_STEP_SUMMARY
+
+            echo "### Tests result (CTest):" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             cat "${{env.BUILD_DIR}}/ctest-test-Summary.md" >> $GITHUB_STEP_SUMMARY
         if: always()

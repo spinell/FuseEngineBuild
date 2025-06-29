@@ -140,6 +140,7 @@ jobs:
          ctest \
           --rerun-failed  \
           --output-on-failure  \
+          --progress \
           --output-junit ctest-test-Summary.xml
 
       #
@@ -151,8 +152,15 @@ jobs:
         uses: test-summary/action@v2.4
         with:
           paths: ${{env.BUILD_DIR}}/ctest-test-Summary.xml
+          output:  ${{env.BUILD_DIR}}/ctest-test-Summary.md
           show: "fail, skip"
         if: always()
+
+      #
+      # run cmake install
+      #
+      - name: Install
+        run: cat ${{env.BUILD_DIR}}/ctest-test-Summary.md
 
       #
       # run cmake install

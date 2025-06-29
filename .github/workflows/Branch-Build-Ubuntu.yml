@@ -149,6 +149,8 @@ jobs:
           --progress \
           --output-junit ctest-test-Summary.xml
 
+      - name: Generate ctrf report
+        run: |
           npx junit-to-ctrf ${{env.BUILD_DIR}}/tests/result/*.xml -o ctrf/ctest-test-summary.json
           cat ctrf/ctest-test-summary.json
 
